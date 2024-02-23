@@ -1,0 +1,32 @@
+{ 
+    "discord" :{
+        "botKey": "<YOUR_DISCORD_BOT_KEY>"
+    },
+    "llmConfig":{
+        "systemPromptFile":"systemprompt.txt",
+        "endpoint":"<YOUR_LLM_INFERENCE_ENDPOINT - i.e 'http://localhost:1234/v1/chat/completions' for LM Studio locally>"
+    },
+    "roobee":{
+        "managementUserId": "",
+        "quitPhrases": ["quit"],
+        "shushPhrases": ["be quiet"],
+        "names": ["Roobee", "Ruby"],
+        "userRelationshipsFolder": "config/relationships/user"
+    },
+    "voiceEngine": {
+        "use": "elevenLabs",
+        "maxTtsLength":"300",
+        "elevenLabs" : {
+            "apiKey":  "<YOUR_ELEVENLABS_KEY>",
+            "voiceId": "<YOUR_ELEVENLABS_VOICEID>"  
+        },
+        "azure":{
+            "lang": "<YOUR_AZURE_VOICE_LANGUAGE -  i.e 'en-US'>",
+            "region":"<YOUR_AZURE_REGION -  i.e 'useast'>",
+            "subkey":"<YOUR_AZURE_KEY>",
+            "ssmlFile": "azureSSMLDefinition.xml",
+            "voice": "<YOUR_AZURE_VOICE_NAME - i.e 'en-US-NancyNeural'>"
+        },
+        "default":{}
+    }
+}
