@@ -128,3 +128,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Roobee Local config files
+config/triggers.json
+config/config.json
+config/systemprompt.txt
