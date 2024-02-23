@@ -1,0 +1,19 @@
+<!-- 
+    This file is only for the Azure Speech Synthesis Service, for specifications/options: 
+    https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-synthesis-markup
+    This file contains tokens.
+
+      Taken from config.json:
+        -this.config.voiceEngine.azure.lang
+        -this.config.voiceEngine.azure.voice
+
+      Directly given to the renderSpeech function in the AzureTTS class:
+        -text
+ -->
+<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="{{lang}}">
+<voice name="{{voice}}">
+<prosody pitch="+10.00%">
+   {{text}}
+</prosody>
+</voice>
+</speak>

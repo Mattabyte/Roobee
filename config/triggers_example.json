@@ -1,0 +1,11 @@
+[
+    {
+        "phrase": "these violent delights",
+        "response":"Have violent ends.",
+        "filename":"path/to/violentends.wav"
+    },
+    {
+        "phrase": "whats a good movie",
+        "response":"What kind of movie?"
+    }
+]

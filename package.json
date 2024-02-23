@@ -1,0 +1,59 @@
+{
+  "name": "roobee",
+  "version": "1.0.0",
+  "description": "An open-source, speech to speech discord voice chat companion",
+  "main": "bot.js",
+  "author": "Mattabyte",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.19.0"
+  },
+  "scripts": {
+    "dev": "nodemon .",
+    "start": "node ."
+  },
+  "homepage": "https://github.com/Mattabyte/Roobee#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mattabyte/Roobee.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Mattabyte/Roobee/issues"
+  },
+  "dependencies": {
+    "discord-speech-recognition": "^3.4.1",
+    "discord-tts": "^1.0.3",
+    "discord.js": "^14.12.1",
+    "dotenv": "^16.4.5",
+    "elevenlabs-node": "^2.0.3",
+    "microsoft-cognitiveservices-speech-sdk": "^1.35.0",
+    "module-alias": "^2.2.3",
+    "sodium-native": "^4.0.6"
+  },
+  "devDependencies": {
+    "node": ">=18.19.0",
+    "nodemon": "^3.0.3"
+  },
+  "keywords": [
+    "ai",
+    "artificial-intelligence",
+    "azure-speech",
+    "chat-companion",
+    "discord",
+    "discord.js",
+    "discord-bot",
+    "llm-inference",
+    "open-source",
+    "speech-to-speech",
+    "tts",
+    "voice-assistant-ai",
+    "voice-recognition"
+  ],
+  "_moduleAliases": {
+    "@root": ".",
+    "@core": "./src/core/",
+    "@models": "./src/models/",
+    "@services": "./src/services/",
+    "@utils": "./src/utils/"
+  }
+}
