@@ -11,14 +11,21 @@ const LLMService = require('@services/llmRequest');
 class Roobee {
     constructor(config) {;
         this.config = config;
+        // Services
         this.voiceEngine = new VoiceEngine(config);
         this.discordService = new Discord(config);
         this.llmService = new LLMService(config);
         this.audioPlayer = createAudioPlayer();
+
+        // Ruby will remain interested for her attention span (config.json - in ms)
+        // Starting with no specific attention to anyone or conversation.
         this.roobeeAttention = null;
-        this.conversation = null;
+        this.roobeeAttentionSpan = null;
         this.attentionTimerId = null;
-    };
+
+        // Empty conversation
+        this.conversation = null;
+    }
 
     run(){
         console.info('Wake Up Roobee...');
@@ -70,10 +77,10 @@ class Roobee {
             // Or for a scripted interaction (Not Implemented Yet.)
             } else if (false){
                 console.log('Attempted scripted interaction for this message.');
-            //Let ruby move on.
+            //Let Roobee move on.
                 this.conversation.forgetConversation();
             } else {
-             // Call out to see if responding, or interested in responding.
+             // Track the conversation to determine interest, and respond.
                 this.conversation.trackConversation(msg, (input) => this.respond(input));
             };
         });
@@ -94,38 +101,51 @@ class Roobee {
           clearTimeout(this.attentionTimerId);
         };
       
-        // Roobee will listen to others.
+        // Roobee will listen to others when the timeout listeningAttentionSpan is reached.
         this.attentionTimerId = setTimeout(()=> {
             this.roobeeAttention = null;
-            console.log('Ruby is listening to anyone.');
-        }, this.roobeeAttentionSpan);
+            console.log('Roobee is listening to anyone.');
+        }, this.config.roobee.listeningAttentionSpanInMilli);
       
-        // Roobee is engaged in a conversation
-        console.log('Ruby is listening to ' + person);
+        // Roobee is engaged in a conversation - listeningAttentionSpan being refreshed by the 'person' talking
+        this.roobeeAttention = person;
+        console.log('Roobee is listening to ' + person);
     };
 
     async generateResponse(msg){
         let userPrompt = msg.content;
         // Load/start relationship
         var relationship = new Relationship(this.config, msg.author.username);
+
         // Get conversation history or Start history
         let llmRequestMessage = this.conversation.getConversation(relationship);
         llmRequestMessage.push({ "role": "user", "content": userPrompt });
-        console.log(llmRequestMessage);
-        let response = await this.llmService.llmRequest(llmRequestMessage);
+
+        // below logging can be useful if debugging - will fix when implementing logger.
+        // console.log(llmRequestMessage);
+
+        // Get Roobee's response.
+        let response = await this.llmService.llmRequest(llmRequestMessage, this.config.roobee.temperature);
+
+        // A lot of RP LLMs put emoji's and other characters that can break TTS engines.
+        // The below should clean it up.
         let cleanResponse = response.content.replace('&',' and ').replace(/[`~@#$%^*()_|+\-=;:"<>\{\}\[\]\\\/]/gi, '');
+
+        // Add the back and forth for future updates to this conversation (Roobee's memory)
         this.conversation.updateConversation(response, (messages) => relationship.evaluateRelationship(messages));
+
+        // Say it.
         this.voiceEngine.say(cleanResponse, this.discordService.voiceConnection, this.audioPlayer);
     };
 
     respond(msg){
-        //If Ruby isnt focussed.
-        if (!this.roobeeAttention){
+        //If Roobee isnt focussed, or is responding to who she is focussed on.
+        if (!this.roobeeAttention || this.roobeeAttention == msg.author.globalName){
             this.flashAttention(msg.author.globalName);
             this.generateResponse(msg);
         } else {
-            //Ruby is distracted
-            console.log('Ruby is too distracted to respond to ' + msg.author.globalName);
+            //Roobee is distracted
+            console.log('Roobee is too distracted to respond to ' + msg.author.globalName);
             return
         };
     };

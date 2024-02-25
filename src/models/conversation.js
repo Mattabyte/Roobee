@@ -4,13 +4,12 @@
 const Prompt = require('@models/prompt');
 
 class Conversation {
-    // Ruby has a state object that is used to keep track of the current state of Ruby, like mood, etc.
+    // Roobee has a state object that is used to keep track of the current state of Roobee, like mood, etc.
     constructor(config) {
         console.log('Starting a conversation...');
         this.config = config;
         this.buffer = [];
         this.messages = [];
-        this.attentionSpan = 40000; // 40 seconds before she forgets the history and moves on
         this.prompt = new Prompt(config, this.config.llmConfig.systemPromptFile);
         this.timerId = null;
         return this
@@ -61,12 +60,12 @@ class Conversation {
           clearTimeout(this.timerId);
         };
       
-        // Ruby has lost interest.
+        // Roobee has lost interest.
         this.timerId = setTimeout(()=> {
             this.forgetConversation();
-        }, this.attentionSpan);
+        }, this.config.roobee.conversationAttentionSpanInMilli);
       
-        // Ruby is engaged in a conversation
+        // Roobee is engaged in a conversation
         console.log('Roobee is still engaged in the conversation');
     };
 
@@ -79,21 +78,22 @@ class Conversation {
         
         this.buffer.push({"username": msg.author.username , "content": msg.content});
 
-        // See if Ruby is engaged in conversation, and continue it
+        // See if Roobee is engaged in conversation, and continue it
         if (this.isInConversation()){
             //need to pass back action?
             callback(msg);
         };
 
-        // Someone is talking to Ruby
+        // Someone is talking to Roobee
         if (!(this.isInConversation()) && (this.matchPhrases(msg.content, this.config.roobee.names))){
             callback(msg);
         };
 
-        // Ruby might respond if the conversation interests her (but wait until buffer is full)
+        // Roobee might respond if the conversation interests her (but wait until buffer is full)
         if (this.buffer.length == 5) {
-            console.log(this.buffer);
-            //Ruby will register her interest in the conversation class and wait to voice her input
+            // console.log(this.buffer);
+            // TODO: Interest
+            //Roobee will register her interest in the conversation class and wait to voice her input
             // var interested = this.conversation.interestsRoobee(this.conversationBuffer, msg);
             // if(interested){
             //     //Clear the buffer (so she doesnt keep triggering interest.)

@@ -5,11 +5,28 @@
 // Roobee is best experienced with a hosted service for a more immersive response.
 
 const ElevenLabs = require("elevenlabs-node");
+const { createAudioResource, StreamType } = require("@discordjs/voice");
 
 class ElevenLabsSpeechService {
     constructor(config){
         console.info('Selecting ElevenLabs Speech Service...');
-        const voiceEngine = new ElevenLabs(config.voiceEngine.elevenLabs);
+        this.voiceEngine = new ElevenLabs(config.voiceEngine.elevenLabs);
+        return this;
+    }
+
+    // Takes in the Text to render as speech, subscribes the audioplayer to the voice channel
+    // Streams the result into the channnel (the ElevenLabs response is the audio stream)
+    renderSpeechToChannel(text, voiceChannel, audioPlayer){
+        console.time("TTS Service Response Time: ");
+        this.voiceEngine.textToSpeechStream({
+            // The text you wish to convert to speech
+            textInput: text,                
+            }).then((res) => {
+            let audioResource = createAudioResource(res, { inputType: StreamType.Arbitrary });
+            voiceChannel.subscribe(audioPlayer);
+            audioPlayer.play(audioResource);
+            console.timeEnd("TTS Service Response Time: ");
+        }).catch(console.error);
     };
 };
 

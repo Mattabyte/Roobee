@@ -133,3 +133,4 @@ dist
 config/triggers.json
 config/config.json
 config/systemprompt.txt
+config/relationships/user/*

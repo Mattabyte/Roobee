@@ -11,7 +11,8 @@
         "quitPhrases": ["quit"],
         "shushPhrases": ["be quiet"],
         "names": ["Roobee", "Ruby"],
-        "userRelationshipsFolder": "config/relationships/user"
+        "userRelationshipsFolder": "config/relationships/user",
+        "temperature": 0.7
     },
     "voiceEngine": {
         "use": "elevenLabs",

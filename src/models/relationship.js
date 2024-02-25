@@ -44,16 +44,29 @@ class Relationship {
         fs.writeFileSync(path.join(this.config.rootpath, `/config/relationships/user/${this.relationshipFilename}`), updaterelationship);
     };
 
+
+    // This method takes in the conversation so far and makes a separate request to the LLM to look at 
+    // the messages and determine the 'feeling' of these phrases to give Roobee a sense of how to 
+    // interact with this person in the future. Its determination and reponse is driven by evaluationprompt.txt
     async evaluateRelationship(messages){
         let llmRequestMessages = [];
         let llmService = new LLMService(this.config);
+
+        // We only want the users input, not the 'assistants' reponses
         let userMessages = messages
             .filter(message => message.role === 'user')
             .map(message => message.content);
+
+        // Build the evaluation request for the LLM to use 
         let evaluationPrompt = new Prompt(this.config, `relationships/evaluationprompt.txt`);
         llmRequestMessages.push({ "role": "system", "content": evaluationPrompt.system });
         llmRequestMessages.push({ "role": "user", "content": JSON.stringify(userMessages) });
-        let response = await llmService.llmRequest(llmRequestMessages);
+
+        // Low temperature request for this task as we need the input to be predictable (because we cast as an array)
+        let response = await llmService.llmRequest(llmRequestMessages, 0.3);
+
+        // This can really break Roobee if the responses cant be cast to an array properly. 
+        // This method should be refactored to build the array more reliably. 
         this.data.influence.attitude = JSON.parse(response.content);
         this.saveRelationshipData();
     }

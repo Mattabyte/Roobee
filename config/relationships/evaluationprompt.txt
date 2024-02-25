@@ -1,8 +1,9 @@
 Given the sample of conversation input from a single person provided by the user, consider the attitudes and feelings of the person making the statements based on the words spoken.
 
-After considering the sample, reply with an array of strings that best describes the sentiment or attitude of the words spoken.
+After considering the sample, only reply with an array of strings that best describes the sentiment or attitude of the words spoken.
 
-Here's some examples to follow:
+Never deviate from the formating of the examples provided below.
+Here's the examples of input and expected output:
 
 <|user|>
 ["f*** you", "you're worthless"]

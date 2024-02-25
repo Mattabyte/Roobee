@@ -26,8 +26,8 @@ class Config {
 
     validate(config, rootpath){
         // General Roobee Config - Name, command phrases
-        if (!config.roobee || !config.roobee.names || config.roobee.names == '' || !config.roobee.quitPhrases || !config.roobee.shushPhrases ) {
-            throw new Error('Invalid configuration: Roobee needs name set, and quit/quiet phrases set.');
+        if (!config.roobee || !config.roobee.names || config.roobee.names == '' || !config.roobee.quitPhrases || !config.roobee.shushPhrases || !config.roobee.temperature ) {
+            throw new Error('Invalid configuration: Roobee needs name set, quit/quiet phrases, and temperature set.');
         };
 
         // Discord Bot Key must be set
