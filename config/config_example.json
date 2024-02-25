@@ -12,6 +12,8 @@
         "shushPhrases": ["be quiet"],
         "names": ["Roobee", "Ruby"],
         "userRelationshipsFolder": "config/relationships/user",
+        "listeningAttentionSpanInMilli": 15000,
+        "conversationAttentionSpanInMilli": 40000,
         "temperature": 0.7
     },
     "voiceEngine": {
@@ -28,6 +30,8 @@
             "ssmlFile": "azureSSMLDefinition.xml",
             "voice": "<YOUR_AZURE_VOICE_NAME - i.e 'en-US-NancyNeural'>"
         },
-        "default":{}
+        "default":{
+            "info": "specify 'default' in 'use' for system TTS"
+        }
     }
 }
