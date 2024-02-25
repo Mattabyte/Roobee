@@ -12,6 +12,7 @@ class LLMService {
         return this;
     };
 
+    // Ensures the LLM endpoint is available (network), catches timeouts or connection refusals.
     async testEndpoint(endpoint){
         try {
             var llmReponse = await this.testRequest(endpoint);
@@ -21,6 +22,8 @@ class LLMService {
         }
     };
 
+    // Ensures the LLM endpoint is available (application), catches malformed request/response
+    // The test message is a simple system prompt and user prompt.
     async testRequest(endpoint){
         let testMessage = '[{ "role": "system", "content": "Only answer with the single word: Yes." },{ "role": "user", "content": "OK?" }]'
         let response = await fetch(endpoint, {
@@ -47,14 +50,18 @@ class LLMService {
         }
     };
 
-    async llmRequest(messages){
+    // Actual LLM Request method.
+    // Takes an appropriately formatted message ( like [{ "role": "system", "content": "Only answer with the single word: Yes." },{ "role": "user", "content": "OK?" }] ) - includes prompts.
+    // And a temperature as a float between 0 and 1 (0.7 is usually the default.) this is how varied a response can be. 
+    // Responds with the LLM Message (which has the .content attribute for the actual textual response of the model)
+    async llmRequest(messages, temperature){
         console.time("LLM Service Response Time: ");
         let response = await fetch(this.endpoint, {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
             body:JSON.stringify({
                 "messages": messages, 
-                "temperature": 0.7, 
+                "temperature": temperature, 
                 "max_tokens": -1,
                 "stream": false
             })

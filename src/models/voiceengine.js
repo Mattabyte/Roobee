@@ -23,7 +23,7 @@ class VoiceEngine {
               serviceProvider = new ElevenLabsSpeechService(config);
               break;
             default:
-              const DiscordTTSService = require('@services/DiscordTTSService');
+              const DiscordTTSService = require('@services/DiscordTTS');
               serviceProvider = new DiscordTTSService(config);
         };
 

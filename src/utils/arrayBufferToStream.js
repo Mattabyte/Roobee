@@ -1,4 +1,7 @@
 // Helper Class to stream audio recieved as an ArrayBuffer (Azure TTS).
+// Azure TTS returns an object 'audioData' that is an array buffer.
+// This class is used to process that into a chunked stream to be sent to discord 
+// as it is read, to improve performance and the user experience of snappy responses.
 
 const { Readable } = require('stream')
 

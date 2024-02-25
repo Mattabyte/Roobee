@@ -43,7 +43,7 @@ npm install
 
 <br>
 
-<h1 align="center">  Features  </h1>
+<h1 align="center"> 🌟 Features 🌟 </h1>
 
 Roobee will join your voice channel after starting the application and sending her a direct message with '@Roobee'
 
@@ -86,6 +86,8 @@ Roobee's system prompt is designed to work with the awesome llama2 based model [
 But you can use whatever model suits your desired type of companion!
 
 If you want to get up and running locally with this model, download and install [LM Studio](https://lmstudio.ai/)
+
+Dont forget to set your stop tokens, and prompting to suit the model you decide to use.
 
 
 ### Results of chat output, behaviour, and performance will vary a lot from model to model (and with different providers)

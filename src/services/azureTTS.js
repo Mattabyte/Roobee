@@ -17,6 +17,8 @@ class AzureSpeechService {
         return this;
     };
 
+    // Takes in the Text to render as speech, subscribes the audioplayer to the voice channel
+    // Streams the result into the channnel (the Azure TTS response contains audioData [arraybuffer] that needs to be chunked/streamed)
     renderSpeechToChannel(text, voiceChannel, audioPlayer){
         let azureSSMLMessage = this.azureSSMLMessageDefinition.replace('{{lang}}',this.config.voiceEngine.azure.lang).replace('{{voice}}',this.config.voiceEngine.azure.voice).replace('{{text}}',text)
         // Sends off text to be converted to speech and rendered as audio to the provided player (which is subbed to a channel.)
@@ -25,7 +27,8 @@ class AzureSpeechService {
         speechSynthesizer.speakSsmlAsync(azureSSMLMessage,
             result => {
                 if (result) {
-                    // If you want the response for Id/etc
+                    // If you want the response for Id/etc -> Also contains error info if failed.
+                    // This speech systhesis call can fail if the text contans special characters from your LLM
                     // console.info(JSON.stringify(result));
                     let ttsArrayBuffer = result.audioData;
                     let audioStream = new ArrayBufferToStream(ttsArrayBuffer);
@@ -41,10 +44,6 @@ class AzureSpeechService {
                 speechSynthesizer.close();
             }   
         );
-    };
-
-    shush(){
-
     };
 };
 

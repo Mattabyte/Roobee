@@ -5,7 +5,7 @@ const path = require('path');
 const Roobee = require('@core/roobee');
 const Config = require('@utils/config')
 
-//Handle config
+//Validate and load configuration file
 const rootpath = __dirname;
 const configfile = path.join(rootpath, "/config/config.json");
 const configurator = new Config(configfile, rootpath);
