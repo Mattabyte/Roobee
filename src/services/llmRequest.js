@@ -27,7 +27,7 @@ class LLMService {
         switch(this.config.llmConfig.use) {
             case 'openai':
               // Use Open AI API Service
-              const OpenAIService = require('@llm/OpenAI');
+              const OpenAIService = require('@llm/openAI');
               serviceProvider = new OpenAIService(this.config);
               break;
             default:
