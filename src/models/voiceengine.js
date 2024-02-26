@@ -10,20 +10,20 @@ class VoiceEngine {
 
     configureService(config){
         // Determine service provider from config
-        let serviceProvider;
+        let serviceProvider = null;
         switch(config.voiceEngine.use) {
             case 'azure':
               // Use Azure Speech
-              const AzureSpeechService = require('@services/azureTTS');
+              const AzureSpeechService = require('@tts/azureTTS');
               serviceProvider = new AzureSpeechService(config);
               break;
             case 'elevenLabs':
               // Use ElevenLabs.io
-              const ElevenLabsSpeechService = require('@services/ElevenLabsTTS');
+              const ElevenLabsSpeechService = require('@tts/ElevenLabsTTS');
               serviceProvider = new ElevenLabsSpeechService(config);
               break;
             default:
-              const DiscordTTSService = require('@services/DiscordTTS');
+              const DiscordTTSService = require('@tts/DiscordTTS');
               serviceProvider = new DiscordTTSService(config);
         };
 

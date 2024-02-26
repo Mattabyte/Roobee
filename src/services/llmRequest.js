@@ -3,78 +3,66 @@
 // Based on Pygmalion LLM Model Formatting and a Local LM Studio endpoint.
 // Will consider extending to handle public services.
 
+
 class LLMService {
     constructor(config){
         console.info('Starting LLM Service...');
         this.config = config;
-        this.testEndpoint(config.llmConfig.endpoint);
-        this.endpoint = config.llmConfig.endpoint;
+        this.startService()
         return this;
     };
 
-    // Ensures the LLM endpoint is available (network), catches timeouts or connection refusals.
-    async testEndpoint(endpoint){
-        try {
-            var llmReponse = await this.testRequest(endpoint);
-            console.info(`LLM Endpoint OK? ...Responded: ${llmReponse}`);
-        } catch (err) {
-            throw new Error(`Error connecting to LLM Endpoint: ${err.message}`);
-        }
-    };
-
-    // Ensures the LLM endpoint is available (application), catches malformed request/response
-    // The test message is a simple system prompt and user prompt.
-    async testRequest(endpoint){
-        let testMessage = '[{ "role": "system", "content": "Only answer with the single word: Yes." },{ "role": "user", "content": "OK?" }]'
-        let response = await fetch(endpoint, {
-            method: 'POST',
-            headers: {"Content-Type": "application/json"},
-            body:JSON.stringify({
-                "messages": testMessage, 
-                "temperature": 0.1, 
-                "max_tokens": -1,
-                "stream": false
-            })
-        })
-        .then((response) => response.json())
-        .then((responsetext) => { return responsetext })
-        .catch((err) => { return err });
-        if(await response.cause?.code){
-            //Connection Error
-            throw new Error(`LLM Connection Error: ${response.cause.code} Check Your LLM Configuration.`);
-        } else if (await response.error){
-            //Logic/Config Error
-            throw new Error(`LLM Reponse Error: ${response.error} Check Your LLM Configuration.`);
+    //Singleton
+    startService(){
+        if(!this.llmService){
+            this.llmService = this.configureService(this.config);
         } else {
-            return response.choices[0].message.content;
+            return 
+        }
+    }
+
+    configureService(){
+        // Determine service provider from config
+        let serviceProvider = null;
+        switch(this.config.llmConfig.use) {
+            case 'openai':
+              // Use Open AI API Service
+              const OpenAIService = require('@llm/OpenAI');
+              serviceProvider = new OpenAIService(this.config);
+              break;
+            default:
+              // By Default, use LM Studio locally.
+              const LMStudioService = require('@llm/lmStudio');
+              serviceProvider = new LMStudioService(this.config);
+              break;
+        };
+
+        if (serviceProvider){
+            return serviceProvider;
+        } else {
+            throw new Error(`Failed to load LLM Service: ${err.message}`);
+        };
+    };
+
+    // Ensures the LLM endpoint is available, catches malformed request/response
+    // The test message is a simple system prompt and user prompt.
+    async testRequest(){
+        let testMessage = [];
+        testMessage.push({ "role": "system", "content": "Only answer with the single word: Yes." });
+        testMessage.push({ "role": "user", "content": "OK?" })
+        try {
+            let response = await this.llmService.llmRequest(testMessage, 0.1)
+        } catch (err) {
+            throw new Error(`Error connecting to LLM Endpoint (Check configuration): ${err.message}`);
         }
     };
 
-    // Actual LLM Request method.
     // Takes an appropriately formatted message ( like [{ "role": "system", "content": "Only answer with the single word: Yes." },{ "role": "user", "content": "OK?" }] ) - includes prompts.
     // And a temperature as a float between 0 and 1 (0.7 is usually the default.) this is how varied a response can be. 
     // Responds with the LLM Message (which has the .content attribute for the actual textual response of the model)
     async llmRequest(messages, temperature){
-        console.time("LLM Service Response Time: ");
-        let response = await fetch(this.endpoint, {
-            method: 'POST',
-            headers: {"Content-Type": "application/json"},
-            body:JSON.stringify({
-                "messages": messages, 
-                "temperature": temperature, 
-                "max_tokens": -1,
-                "stream": false
-            })
-        })
-        .then((response) => response.json())
-        .then((responsetext) => { return responsetext })
-        .catch((err) => { return err });
-        if (await response.error){
-            throw new Error(`LLM Reponse Error:  ${response.error} Check Your LLM Configuration.`);
-        } else {
-            console.timeEnd("LLM Service Response Time: ");
-            return response.choices[0].message
-        }
+        let response = await this.llmService.llmRequest(messages, temperature);
+        return response;
     };
 };
 

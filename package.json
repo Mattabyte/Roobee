@@ -28,6 +28,7 @@
     "elevenlabs-node": "^2.0.3",
     "microsoft-cognitiveservices-speech-sdk": "^1.35.0",
     "module-alias": "^2.2.3",
+    "openai": "^4.28.0",
     "sodium-native": "^4.0.6"
   },
   "devDependencies": {
@@ -53,6 +54,8 @@
     "@root": ".",
     "@core": "./src/core/",
     "@models": "./src/models/",
+    "@tts": "./src/services/tts/",
+    "@llm": "./src/services/llm/",
     "@services": "./src/services/",
     "@utils": "./src/utils/"
   }

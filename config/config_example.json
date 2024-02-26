@@ -3,6 +3,13 @@
         "botKey": "<YOUR_DISCORD_BOT_KEY>"
     },
     "llmConfig":{
+        "use": "lmstudio",
+        "lmStudio":{
+            "apiKey" : "not-needed"
+        },
+        "openAi":{
+            "apiKey" : "<YOUR_OPEN_AI_KEY>"
+        },
         "systemPromptFile":"systemprompt.txt",
         "endpoint":"<YOUR_LLM_INFERENCE_ENDPOINT - i.e 'http://localhost:1234/v1/chat/completions' for LM Studio locally>"
     },
@@ -18,7 +25,7 @@
     },
     "voiceEngine": {
         "use": "elevenLabs",
-        "maxTtsLength":"300",
+        "maxTtsLength":"NOT IMPLEMENTED YET",
         "elevenLabs" : {
             "apiKey":  "<YOUR_ELEVENLABS_KEY>",
             "voiceId": "<YOUR_ELEVENLABS_VOICEID>"  
