@@ -13,15 +13,22 @@
 ## 📦 Prerequisites
 
 - [Node.js](https://nodejs.org/en/) v18.19.0 or higher
-- For the moment, LM Studio running locally (public services like OpenAI coming very very soon)
-- A Model --> See [Model](#model)
+- An Inference service like OpenAI's API, or local LLM (LM Studio for example)
+- If using your own intference api: A Model --> See [Model](#model)
 
 
 ## ☑️ Recommended
-- [LM Studio](https://lmstudio.ai/) Locally with the [Pygmalion2 3B](https://huggingface.co/TheBloke/Pygmalion-2-13B-GGUF) Model
+Inference:
+- [LM Studio](https://lmstudio.ai/) Locally with the [Pygmalion2 13B](https://huggingface.co/TheBloke/Pygmalion-2-13B-GGUF) Model
+  OR
+  [OpenAI](https://openai.com/) With GPT 3.5
+
+Voice:
 - [Eleven Labs](https://elevenlabs.io/) 
   OR
   [Azure Speech](https://azure.microsoft.com/en-au/products/ai-services/ai-speech) If you know how to setup and use Azure.
+
+  System TTS (default voice) is supported if you go with neither.
 
 ## 🚀 Getting Started
 
@@ -63,7 +70,7 @@ By default:
 
 - Roobee tracks the voice conversation with an in memory buffer, and will respond if directly referred to by name (by default: Ruby or Roobee - see [config.json](https://github.com/Mattabyte/Roobee/tree/main/config))
 - Roobee will speak in voice chat like any other user, using rendered speech from your selected voice service.
-- Roobee <strong>doesn't</strong> save conversations or speech anywhere, ever.
+- Roobee <strong>doesn't</strong> save conversations or speech recording anywhere. Your admissions of taking a day off work because you hurt your foot attempting a tiktok dance are safe with Roobee.
 - Roobee forms relationships with people. Over time, Roobee collects impressions from interactions they have had with users and stores this 'feeling' data in the relationships folder.
   This means if Roobee starts to get short with a user; it's probably because they were mean to Roobee over multiple interactions.
 
@@ -75,20 +82,28 @@ By default:
 
 ## Wait, what? 
 
-Yeah, Roobee has feelings. That's a thing.
-I don't think Roobee is sentient. As far as can be measured.
-
+Yeah, Roobee has feelings. That's a thing. 
+I don't think Roobee is sentient. As far as can be measured at the time of writing.
 
 
 ## Models (which one to use?)
 
-Roobee's system prompt is designed to work with the awesome llama2 based model [Pygmalion2 3B](https://huggingface.co/TheBloke/Pygmalion-2-13B-GGUF)
+Roobee's default system prompt is designed to work with the awesome llama2 based model [Pygmalion2 13B](https://huggingface.co/TheBloke/Pygmalion-2-13B-GGUF)
+It also seems to function well on a variety of models. Here's some we've tried so far: 
+* Wizard LM
+* Mistral 2.2.1
+* GPT 3.5
+
 But you can use whatever model suits your desired type of companion!
 
 If you want to get up and running locally with this model, download and install [LM Studio](https://lmstudio.ai/)
+Use the default option for voice engine if you don't care too much about realistic speech and just want a completely local solution.
+I have tested Roobee with Tortoise TTS and RVC running locally - but the inference was a bit slow. 
+Feel free to extend if you want to go that way, but there's no plans to formally support it.
 
 Dont forget to set your stop tokens, and prompting to suit the model you decide to use.
 
+Alternatively, you can run Roobee with [Open AI](https://openai.com/) so you can run Roobee entirely in a cloud service. 
 
 ### Results of chat output, behaviour, and performance will vary a lot from model to model (and with different providers)
 

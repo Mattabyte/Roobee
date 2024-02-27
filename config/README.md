@@ -28,7 +28,7 @@ Roobee is fastest when run locally, but support for external LLM's is coming soo
 At the moment Roobee supports 3 voice services: 
 - Azure Speech Services
 - Elevenlabs.io 
-- Default (boring) TTS.
+- Default (system) TTS.
 
 You can select which to use with the 'use' section of the config.json. Just make sure you add the keys/settings relating to which 
 service you 'use'. Default TTS requires no configuration.
