@@ -15,22 +15,13 @@ class Prompt {
         this.system = null;
         this.reloadPromptFile(promptFile);
         return this
-    };
+    }
 
     reloadPromptFile(promptFile){
         // Return the System Prompt from config/systemprompt.txt
         let promptFileContent = fs.readFileSync(path.join(this.config.rootpath, `/config/${promptFile}`), 'utf8');
         this.system = promptFileContent;
         return this.system;
-    };
-
-    getSystemPrompt(){
-        // Return the System Prompt if set or reload it
-        if(this.system){
-            return this.system
-        } else {
-            return reloadPromptFile()
-        };
     };
 };
 

@@ -17,6 +17,10 @@ class Roobee {
         this.llmService = new LLMService(config);
         this.audioPlayer = createAudioPlayer();
 
+
+        // Test LLM Endpoint
+        this.llmService.testRequest();
+
         // Ruby will remain interested for her attention span (config.json - in ms)
         // Starting with no specific attention to anyone or conversation.
         this.roobeeAttention = null;
@@ -25,6 +29,7 @@ class Roobee {
 
         // Empty conversation
         this.conversation = null;
+        return this;
     }
 
     run(){
@@ -88,6 +93,7 @@ class Roobee {
 
     shush(){
         this.audioPlayer.stop();
+        this.conversation.forgetConversation();
     };
 
     // Takes string and array - returns true if there are any matches. (lowercase to avoid capitalisation on speech recognition)

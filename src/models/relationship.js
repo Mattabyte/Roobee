@@ -14,6 +14,7 @@ class Relationship {
         this.config = config;
         this.relationshipFilename = `relationship_${person}_.json`;
         this.data = this.loadRelationshipData(person);
+        this.relationshipLlmService = new LLMService(this.config);
         return this;
     };
 
@@ -50,10 +51,10 @@ class Relationship {
     // interact with this person in the future. Its determination and reponse is driven by evaluationprompt.txt
     async evaluateRelationship(messages){
         let llmRequestMessages = [];
-        let llmService = new LLMService(this.config);
+        let userMessages = [];
 
         // We only want the users input, not the 'assistants' reponses
-        let userMessages = messages
+        userMessages = messages
             .filter(message => message.role === 'user')
             .map(message => message.content);
 
@@ -63,7 +64,7 @@ class Relationship {
         llmRequestMessages.push({ "role": "user", "content": JSON.stringify(userMessages) });
 
         // Low temperature request for this task as we need the input to be predictable (because we cast as an array)
-        let response = await llmService.llmRequest(llmRequestMessages, 0.3);
+        let response = await this.relationshipLlmService.llmRequest(llmRequestMessages, 0.3);
 
         // This can really break Roobee if the responses cant be cast to an array properly. 
         // This method should be refactored to build the array more reliably. 
