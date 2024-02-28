@@ -6,11 +6,15 @@ const { OpenAI } = require('openai')
 
 class OpenAIService {
     constructor(config){
+        if (OpenAIService.instance) {
+            return OpenAIService.instance;
+        };
         console.info('Using OpenAI Service For LLM...');
         this.config = config;
         this.endpoint = config.llmConfig.endpoint;
         process.env.OPENAI_API_KEY = config.llmConfig.openAi.apiKey
         this.openai = new OpenAI();
+        OpenAIService.instance = this;
         return this;
     };
 
@@ -32,5 +36,8 @@ class OpenAIService {
         }
     };
 };
+
+// Initialize the singleton instance
+OpenAIService.instance = null;
 
 module.exports = OpenAIService;

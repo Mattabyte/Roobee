@@ -10,15 +10,19 @@ const Prompt = require('@models/prompt');
 
 class Relationship {
     constructor(config, person){
+        if (Relationship.instance) {
+            return Relationship.instance;
+        };
         this.person = person;
         this.config = config;
         this.relationshipFilename = `relationship_${person}_.json`;
         this.data = this.loadRelationshipData(person);
         this.relationshipLlmService = new LLMService(this.config);
+        Relationship.instance = this;
         return this;
     };
 
-    loadRelationshipData(person){
+    loadRelationshipData(){
         // format based on users name by id - as the globalName can be anything.
         if (fs.existsSync(path.join(this.config.rootpath, `/config/relationships/user/${this.relationshipFilename}`))){
         // Load relationsip
@@ -50,6 +54,11 @@ class Relationship {
     // the messages and determine the 'feeling' of these phrases to give Roobee a sense of how to 
     // interact with this person in the future. Its determination and reponse is driven by evaluationprompt.txt
     async evaluateRelationship(messages){
+        if(this.data.cemented){
+            //Relationship is cemented - dont bother with evaluation.
+            return;
+        };
+
         let llmRequestMessages = [];
         let userMessages = [];
 
@@ -57,6 +66,11 @@ class Relationship {
         userMessages = messages
             .filter(message => message.role === 'user')
             .map(message => message.content);
+
+        // Lets wait for a bit more data to make a decision
+        if (userMessages.length < 5){
+            return;
+        };
 
         // Build the evaluation request for the LLM to use 
         let evaluationPrompt = new Prompt(this.config, `relationships/evaluationprompt.txt`);
@@ -68,9 +82,16 @@ class Relationship {
 
         // This can really break Roobee if the responses cant be cast to an array properly. 
         // This method should be refactored to build the array more reliably. 
-        this.data.influence.attitude = JSON.parse(response.content);
-        this.saveRelationshipData();
-    }
+        try {
+            this.data.influence.attitude = JSON.parse(response.content);
+            this.saveRelationshipData();
+        } catch (err) {
+            console.warn(`Relationship evalutation yielded an unexpected result: ${err.message} ...ignoring.`)
+        };
+    };
 };
+
+// Initialize the singleton instance
+Relationship.instance = null;
 
 module.exports = Relationship;

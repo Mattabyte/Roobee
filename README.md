@@ -15,6 +15,7 @@
 - [Node.js](https://nodejs.org/en/) v18.19.0 or higher
 - An Inference service like OpenAI's API, or local LLM (LM Studio for example)
 - If using your own intference api: A Model --> See [Model](#model)
+- You need the discord bot setup and generated your key. [Discord Developer Portal](https://discord.com/developers/applications)
 
 
 ## ☑️ Recommended
