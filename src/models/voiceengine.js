@@ -3,8 +3,12 @@
 
 class VoiceEngine {
     constructor(config){
+        if (VoiceEngine.instance) {
+            return VoiceEngine.instance;
+        };
         console.info('Starting Voice Engine...')
         this.service = this.configureService(config);
+        VoiceEngine.instance = this;
         return this;
     };
 
@@ -38,5 +42,8 @@ class VoiceEngine {
         this.service.renderSpeechToChannel(text, voiceChannel, audioPlayer);
     };
 };
+
+// Initialize the singleton instance
+VoiceEngine.instance = null;
 
 module.exports = VoiceEngine;

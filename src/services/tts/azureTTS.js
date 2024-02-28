@@ -9,11 +9,15 @@ const ArrayBufferToStream = require('@utils/arrayBufferToStream');
 
 class AzureSpeechService {
     constructor(config){
+        if (AzureSpeechService.instance) {
+            return AzureSpeechService.instance;
+        };
         console.info('Selecting Azure Speech Service...');
         this.config = config;
         this.speechConfig = SpeechConfig.fromSubscription(config.voiceEngine.azure.subkey, config.voiceEngine.azure.region);
         this.speechConfig.speechSynthesisOutputFormat = SpeechSynthesisOutputFormat.Ogg24Khz16BitMonoOpus;
         this.azureSSMLMessageDefinition = config.voiceEngine.azure.ssmlFileContent;
+        AzureSpeechService.instance = this;
         return this;
     };
 
@@ -46,5 +50,8 @@ class AzureSpeechService {
         );
     };
 };
+
+// Initialize the singleton instance
+AzureSpeechService.instance = null;
 
 module.exports = AzureSpeechService;

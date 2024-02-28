@@ -68,9 +68,13 @@ class Relationship {
 
         // This can really break Roobee if the responses cant be cast to an array properly. 
         // This method should be refactored to build the array more reliably. 
-        this.data.influence.attitude = JSON.parse(response.content);
-        this.saveRelationshipData();
-    }
+        try {
+            this.data.influence.attitude = JSON.parse(response.content);
+            this.saveRelationshipData();
+        } catch (err) {
+            console.warn(`Relationship evalutation yielded an unexpected result: ${err.message} ...ignoring.`)
+        };
+    };
 };
 
 module.exports = Relationship;

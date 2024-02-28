@@ -9,8 +9,12 @@ const { createAudioResource, StreamType } = require("@discordjs/voice");
 
 class ElevenLabsSpeechService {
     constructor(config){
+        if (ElevenLabsSpeechService.instance) {
+            return ElevenLabsSpeechService.instance;
+        };
         console.info('Selecting ElevenLabs Speech Service...');
         this.voiceEngine = new ElevenLabs(config.voiceEngine.elevenLabs);
+        ElevenLabsSpeechService.instance = this;
         return this;
     }
 
@@ -29,5 +33,8 @@ class ElevenLabsSpeechService {
         }).catch(console.error);
     };
 };
+
+// Initialize the singleton instance
+ElevenLabsSpeechService.instance = null;
 
 module.exports = ElevenLabsSpeechService;

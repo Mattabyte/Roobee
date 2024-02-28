@@ -5,9 +5,13 @@
 
 class LMStudioService {
     constructor(config){
+        if (LMStudioService.instance) {
+            return LMStudioService.instance;
+        };
         console.info('Using LMStudio (local) Service For LLM...');
         this.config = config;
         this.endpoint = config.llmConfig.endpoint;
+        LMStudioService.instance = this;
         return this;
     };
 
@@ -37,5 +41,8 @@ class LMStudioService {
         }
     };
 };
+
+// Initialize the singleton instance
+LMStudioService.instance = null;
 
 module.exports = LMStudioService;

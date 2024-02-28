@@ -9,7 +9,12 @@ const { createAudioResource, StreamType } = require("@discordjs/voice");
 
 class DiscordTTSService {
     constructor(config){
+        if (DiscordTTSService.instance) {
+            return DiscordTTSService.instance;
+        };
         console.info('Selecting Discord TTS Speech Service...');
+        DiscordTTSService.instance = this;
+        return this;
     };
 
     // Takes in the Text to render as speech, subscribes the audioplayer to the voice channel
@@ -38,5 +43,8 @@ class DiscordTTSService {
         console.timeEnd("TTS Service Response Time: ");
     };
 };
+
+// Initialize the singleton instance
+DiscordTTSService.instance = null;
 
 module.exports = DiscordTTSService;

@@ -10,6 +10,9 @@ const LLMService = require('@services/llmRequest');
 
 class Roobee {
     constructor(config) {;
+        if (Roobee.instance) {
+            return Roobee.instance;
+        };
         this.config = config;
         // Services
         this.voiceEngine = new VoiceEngine(config);
@@ -29,6 +32,7 @@ class Roobee {
 
         // Empty conversation
         this.conversation = null;
+        Roobee.instance = this;
         return this;
     }
 
@@ -156,5 +160,8 @@ class Roobee {
         };
     };
 };
+
+// Initialize the singleton instance
+Roobee.instance = null;
 
 module.exports = Roobee;
