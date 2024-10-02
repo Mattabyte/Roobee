@@ -10,6 +10,8 @@
 
 <br>
 
+## Major update coming in the next few weeks. Keep an eye out for Ruby 2.0 or what will be known as Roobee - 'Tuesday'
+
 ## 📦 Prerequisites
 
 - [Node.js](https://nodejs.org/en/) v18.19.0 or higher
